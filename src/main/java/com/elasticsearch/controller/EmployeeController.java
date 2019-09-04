@@ -5,6 +5,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * @author linzhiqiang
  */
@@ -21,8 +24,8 @@ public class EmployeeController {
      */
     @RequestMapping("add")
     public String add() {
-
-        for (int i = 0; i < 10000; i++) {
+        long start = System.currentTimeMillis();
+        for (int i = 50000; i < 51000; i++) {
             Employee employee = new Employee();
             employee.setId(i+"");
             employee.setFirstName("hah");
@@ -31,9 +34,9 @@ public class EmployeeController {
             employee.setAbout("i am in peking");
             employeeRepository.save(employee);
         }
+        long end = System.currentTimeMillis();
 
-
-        System.err.println("add a obj");
+        System.err.println("add a obj"+(end - start)/1000+"s");
         return "success";
     }
 
@@ -65,8 +68,23 @@ public class EmployeeController {
      * @return
      */
     @RequestMapping("query")
-    public Employee query() {
-        Employee accountInfo = employeeRepository.queryEmployeeById("1");
-        return accountInfo;
+    public List<Employee> queryAll() {
+//        Employee accountInfo = employeeRepository.queryEmployeeById("1");
+        Iterable<Employee> all = employeeRepository.findAll();
+        List<Employee> list = new ArrayList<>();
+        for (Employee employee : all) {
+            list.add(employee);
+        }
+        System.out.println(list.size());
+        return list;
     }
+    @RequestMapping("queryName")
+    public List<Employee> queryDistinctByFirstNameAndLastName() {
+//        Employee accountInfo = employeeRepository.queryEmployeeById("1");
+        List<Employee> all = employeeRepository.queryAllByFirstNameOrLastName("hah","ta");
+
+        return all;
+    }
+
+
 }

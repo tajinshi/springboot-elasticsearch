@@ -2,6 +2,9 @@ package com.elasticsearch.dao;
 import com.elasticsearch.bean.Employee;
 import org.springframework.data.elasticsearch.repository.ElasticsearchRepository;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
+
 /**
  * @author linzhiqiang
  */
@@ -15,5 +18,7 @@ public interface EmployeeRepository extends ElasticsearchRepository<Employee,Str
      * @return
      */
     Employee queryEmployeeById(String id);
+
+    List<Employee> queryAllByFirstNameOrLastName(String fName, String lasName);
 
 }
